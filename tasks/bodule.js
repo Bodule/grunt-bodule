@@ -8,12 +8,14 @@
 
 'use strict';
 
+var bodule = require('bodule').bodule;
+
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('bodule', 'Your task description goes here.', function() {
+  grunt.registerMultiTask('bodule', 'Wrap you node module with broswer module', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       punctuation: '.',
@@ -33,11 +35,8 @@ module.exports = function(grunt) {
         }
       }).map(function(filepath) {
         // Read file source.
-        return grunt.file.read(filepath);
+        return bodule(grunt.file.read(filepath), options);
       }).join(grunt.util.normalizelf(options.separator));
-
-      // Handle options.
-      src += options.punctuation;
 
       // Write the destination file.
       grunt.file.write(f.dest, src);
