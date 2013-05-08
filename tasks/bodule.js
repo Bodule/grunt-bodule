@@ -9,6 +9,8 @@
 'use strict';
 
 var bodule = require('bodule').bodule;
+var deepMerge = require('deepmerge');
+var _ = require('underscore');
 
 module.exports = function(grunt) {
 
@@ -35,14 +37,21 @@ module.exports = function(grunt) {
         }
       }).map(function(filepath) {
         // Read file source.
-        return bodule(grunt.file.read(filepath), options);
+        var boduleOptions = {
+            path: filepath
+        };
+
+        boduleOptions = deepMerge(_.clone(options), boduleOptions);
+        return bodule(grunt.file.read(filepath), boduleOptions);
+
       }).join(grunt.util.normalizelf(options.separator));
 
       // Write the destination file.
-      grunt.file.write(f.dest, src);
+      var dest = f.dest + options.package.version + '/' + options.package.main;
+      grunt.file.write(dest, src);
 
       // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+      grunt.log.writeln('File "' + dest + '" created.');
     });
   });
 

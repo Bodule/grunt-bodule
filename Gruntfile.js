@@ -38,7 +38,7 @@ module.exports = function(grunt) {
           punctuation: ' !!!',
         },
         files: {
-          'tmp/my_custom_options.js': ['test/fixtures/testing.js'],
+          'tmp/': ['test/fixtures/**/*.js'],
         },
       },
     },
