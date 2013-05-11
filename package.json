@@ -43,6 +43,7 @@
   "dependencies": {
     "coffee-script": "1.6.2",
     "deepmerge": "~0.2.5",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "bodule": "~0.1.0"
   }
 }

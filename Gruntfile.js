@@ -33,9 +33,7 @@ module.exports = function(grunt) {
     bodule: {
       my_custom_options: {
         options: {
-          separator: ': ',
-          package: grunt.file.readJSON('package.json'),
-          punctuation: ' !!!',
+          package: grunt.file.readJSON('package.json')
         },
         files: {
           'tmp/': ['test/fixtures/**/*.js'],
