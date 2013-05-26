@@ -20,10 +20,8 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('bodule', 'Wrap you node module with broswer module', function() {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-            punctuation: '.',
             separator: '\n'
         });
-
         // Iterate over all specified file groups.
         this.files.forEach(function(f) {
             // Concat specified files.
