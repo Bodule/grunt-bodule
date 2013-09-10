@@ -33,7 +33,7 @@ module.exports = function(grunt) {
     bodule: {
       my_custom_options: {
         options: {
-          package: grunt.file.readJSON('package.json')
+          pkg: grunt.file.readJSON('package.json')
         },
         files: {
           'tmp/': ['test/fixtures/**/*.js'],
@@ -61,6 +61,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['clean', 'bodule']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['test']);
 
 };
