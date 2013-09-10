@@ -21,7 +21,6 @@ module.exports = function(grunt) {
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
     grunt.registerMultiTask('bodule', 'Wrap you node module with broswer module', function() {
-        grunt.log.writeln('options')
 
         var that = this;
 
@@ -33,8 +32,6 @@ module.exports = function(grunt) {
         var dependencies = Object.keys(options.pkg.dependencies || {}).map(function (dep) {
             return [dep, options.pkg.dependencies[dep]]
         })
-
-        grunt.log.writeln(dependencies)
 
         var done = this.async()
         
@@ -62,7 +59,7 @@ module.exports = function(grunt) {
         })
 
         function getRealVersionsCallback() {
-            done()
+            
             // Iterate over all specified file groups.
             this.files.forEach(function(f) {
                 // Concat specified files.
@@ -88,7 +85,7 @@ module.exports = function(grunt) {
 
                     // Write every module for page business logic
                     grunt.file.write(dest, boduleCode);
-                    grunt.log.writeln('File "' + dest + '" created.');
+                    grunt.log.writeln('Module File "' + dest + '" created.');
 
                     return boduleCode;
 
@@ -97,10 +94,13 @@ module.exports = function(grunt) {
                 // Write the destination file.
                 var dest = f.dest + options.pkg.version + '/' + options.pkg.main;
                 grunt.file.write(dest, src);
-
                 // Print a success message.
-                grunt.log.writeln('File "' + dest + '" created.');
+                grunt.log.writeln('Package File "' + dest + '" created.');
             });
+            
+            done()
+            // Hack on async task
+            grunt.asyncCallback && grunt.asyncCallback()
         }
         
     });
