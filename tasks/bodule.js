@@ -15,6 +15,7 @@ var path = require('path');
 var npm = require('npm');
 var semver = require('semver');
 var async = require('async');
+var noloader = require('noloader');
 
 module.exports = function(grunt) {
 
@@ -62,8 +63,12 @@ module.exports = function(grunt) {
             
             // Iterate over all specified file groups.
             this.files.forEach(function(f) {
+                var files = noloader.analyse(options.pkg.main).values().map(function (file) {
+                  return path.relative(process.cwd(), file.id)
+                })
                 // Concat specified files.
-                var src = f.src.filter(function(filepath) {
+                // var src = f.src.filter(function(filepath) {
+                var src= files.filter(function(filepath) {
                     // Warn on and remove invalid source files (if nonull was set).
                     if (!grunt.file.exists(filepath)) {
                         grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -92,10 +97,24 @@ module.exports = function(grunt) {
                 }).join(grunt.util.normalizelf(options.separator));
 
                 // Write the destination file.
-                var dest = f.dest + options.pkg.version + '/' + options.pkg.main;
-                grunt.file.write(dest, src);
+                var destN = f.dest + options.pkg.version + '/' + options.pkg.name + '.js';
+                var destM = f.dest + options.pkg.version + '/' + options.pkg.main;
+
+                grunt.log.writeln(destN)
+                grunt.log.writeln(destM)
+
+
+                if (destN == destM) {
+                    grunt.file.write(destN, src);
+                } else {
+                    grunt.file.write(destN, src + ';\n' +
+                        'define(\'' + options.pkg.name + '@' + options.pkg.version + '/' + options.pkg.name+ '\', [\'' + options.pkg.name + '@' + options.pkg.version + '/' + options.pkg.main+ '\'], function (require, exports, module) {' + 
+                            'module.exports = require(\'' + options.pkg.name + '@' + options.pkg.version + '/' + options.pkg.main+ '\');' + 
+                        '})'
+                    );
+                }
                 // Print a success message.
-                grunt.log.writeln('Package File "' + dest + '" created.');
+                grunt.log.writeln('Package File "' + destN + '" created.');
             });
             
             done()
